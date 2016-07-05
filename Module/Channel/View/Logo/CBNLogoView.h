@@ -1,0 +1,22 @@
+//
+//  CBNLogoView.h
+//  CBNWeeklyMagazine
+//
+//  Created by huaxianwei on 16/6/27.
+//  Copyright © 2016年 上海第一财经报业有限公司. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+@class CBNLogoView;
+
+@protocol CBNLogoViewDelegate <NSObject>
+
+- (void)userCenterAction;
+
+- (void)bookShopAction;
+
+@end
+@interface CBNLogoView : UIView
+@property (nonatomic, assign) id <CBNLogoViewDelegate> delegate;
+
+@end

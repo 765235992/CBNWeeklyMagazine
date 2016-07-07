@@ -140,11 +140,12 @@
 
 - (void)setChapt_Info_Model:(CBNChaptInfoModel *)chapt_Info_Model
 {
-    
-    [_newsThumbImageView sd_setImageWithURL:[NSURL URLWithString:_chapt_Info_Model.chaptPicURL] placeholderImage:[UIImage imageNamed:@"defaultImage.jpg"]];
-    
-    
+    NSLog(@"chaptPicURL -- %@",chapt_Info_Model.chaptPicURL);
     _chapt_Info_Model = chapt_Info_Model;
+
+    [_newsThumbImageView sd_setImageWithURL:[NSURL URLWithString:chapt_Info_Model.chaptPicURL] placeholderImage:[UIImage imageNamed:@"defaultImage.jpg"]];
+    
+    
     
     self.newsTitleLabel.content = chapt_Info_Model.chaptTitle;
     

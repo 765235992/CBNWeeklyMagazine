@@ -18,9 +18,12 @@
 
 #define Index @"index"
 
+#define GetList @"GetList"
 #define GetProjectList @"GetProjectList"
 
 #define Daymore @"Daymore"
+
+#define GetArticle @"GetArticle"
 
 #define request_Key @"key"
 #define request_Set_Key @"setKey"

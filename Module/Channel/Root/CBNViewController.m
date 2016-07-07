@@ -35,5 +35,19 @@
     
     return tempImage;
 }
+- (void)goToTextArticleVCWithChapt_ID:(NSString *)chapt_ID issue_ID:(NSString *)issue_ID DataType:(NSString *)DataType daymore:(NSString *)daymore
+{
+    CBNTextArticleVC *textArticleVC = [[CBNTextArticleVC alloc] init];
+    
+    textArticleVC.chapt_ID= chapt_ID;
+    
+    textArticleVC.issue_ID = issue_ID;
+    
+    textArticleVC.DataType = DataType;
+    
+    textArticleVC.daymore = daymore;
+    
+    [self.navigationController pushViewController:textArticleVC animated:YES];
+}
 
 @end

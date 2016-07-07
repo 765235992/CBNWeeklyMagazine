@@ -105,6 +105,23 @@
     
 }
 
++ (NSString *)pointStandardDateChangeToNeedTime:(NSString *)dateString
+{
+
+    NSDate *date = [self stringDateChangeToStandardDateWithString:dateString];
+    
+    NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];
+    
+    [outputFormatter setLocale:[[NSLocale alloc]initWithLocaleIdentifier:@"zh_CN"]];
+    
+    [outputFormatter setDateFormat:@"yyyy.MM.dd"];
+    
+    NSString *str = [outputFormatter stringFromDate:date];
+    
+    return str;
+    
+}
+
 + (NSString *)standardDateChangeToNeedTime:(NSDate *)date
 {
     NSDateFormatter *outputFormatter = [[NSDateFormatter alloc] init];

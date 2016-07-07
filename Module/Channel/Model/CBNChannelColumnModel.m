@@ -14,7 +14,7 @@
     self = [super init];
     
     if (self) {
-        self.c_id = [NSString stringWithFormat:@"%@",[channelColumnInfo objectForKey:@""]];
+        self.c_id = [NSString stringWithFormat:@"%@",[channelColumnInfo objectForKey:@"c_id"]];
 
         self.color = [NSString stringWithFormat:@"%@",[channelColumnInfo objectForKey:@"color"]];
 

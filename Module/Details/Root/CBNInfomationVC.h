@@ -6,9 +6,9 @@
 //  Copyright © 2016年 上海第一财经报业有限公司. All rights reserved.
 //
 
-#import "CBNViewController.h"
+#import "CBNBaseViewController.h"
 
-@interface CBNInfomationVC : CBNViewController
+@interface CBNInfomationVC : CBNBaseViewController
 /*
  *  仅限新闻详情使用
  */
@@ -17,4 +17,8 @@
 - (void)setClearItemTitle;
 
 - (void)setBackBarButtonItem;
+
+- (void)setItemTitleWithTitle:(NSString *)title;
+
+- (void)serRightBarButtonWithText:(NSString *)text;
 @end

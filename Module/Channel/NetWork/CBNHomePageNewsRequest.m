@@ -73,19 +73,21 @@
     
 
     [CBNHomePageNewsRequest GET:[CBNHomePageNewsRequest getHomePageNewsURL] parameters:[CBNHomePageNewsRequest getHomePageNewsParameters] success:^(id result) {
-        
+        NSLog(@"%@",result);
         if ([[result objectForKey:@"Code"] integerValue] == 200) {
             /*
              *  缓存本地一份
              */
-            [[CBNFileManager sharedInstance] saveBasicDataTypes:result withKey:URL_Key_Word];
+            NSLog(@"%@",result);
+//            [[CBNFileManager sharedInstance] saveBasicDataTypes:result withKey:URL_Key_Word];
 
             NSMutableArray *dataListArray = [[[result objectForKey:@"DataList"] objectForKey:@"List"] objectForKey:@"data"];
             NSMutableArray *tempHomePageArray = [[NSMutableArray alloc] init];
             _recommendCount = 0;
-
+            NSLog(@"%@",result);
+            
             for (NSDictionary *homePageNewsItem in dataListArray) {
-
+                NSLog(@"%@",homePageNewsItem);
                 NSInteger dataType = [[homePageNewsItem objectForKey:@"DataType"] integerValue];
                 
                 if (dataType == 1) {
@@ -141,7 +143,7 @@
             /*
              *  缓存本地一份
              */
-            [[CBNFileManager sharedInstance] saveBasicDataTypes:result withKey:URL_Key_Word];
+//            [[CBNFileManager sharedInstance] saveBasicDataTypes:result withKey:URL_Key_Word];
             
             NSMutableArray *dataListArray = [[[result objectForKey:@"DataList"] objectForKey:@"List"] objectForKey:@"data"];
             NSMutableArray *tempHomePageArray = [[NSMutableArray alloc] init];

@@ -13,5 +13,6 @@
  *  64位编码
  */
 - (NSString *)base64EncodedString;
++ (NSData*)returnDataWithDictionary:(NSDictionary*)dict;
 
 @end

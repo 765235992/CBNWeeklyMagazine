@@ -42,6 +42,7 @@
 #import "CBNNewsItemModel.h"
 #import "CBNUser.h"
 #import "CBNpPermissionsManager.h"
+#import "CBNUMShareManager.h"
 
 //-------------------打印日志-------------------------
 //DEBUG  模式下打印日志,当前行

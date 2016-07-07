@@ -61,18 +61,29 @@
     
     NSArray *nightImageArray =  @[[UIImage imageNamed:@"comment_Image_Night.png"],[UIImage imageNamed:@"collection_Image_Night.png"],[UIImage imageNamed:@"share_Image_Night.png"]];
     
-    CGFloat height = self.frame.size.height*0.41;
+    CGFloat height = self.frame.size.height*0.42;
     
     for (int i = 0; i < 3; i++) {
         
         UIButton *tempButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        [tempButton dk_setBackgroundImage:DKImagePickerWithImages([dayImageArray objectAtIndex:i],[nightImageArray objectAtIndex:i],[dayImageArray objectAtIndex:i]) forState:UIControlStateNormal];
+//        [tempButton dk_setBackgroundImage:DKImagePickerWithImages([dayImageArray objectAtIndex:i],[nightImageArray objectAtIndex:i],[dayImageArray objectAtIndex:i]) forState:UIControlStateNormal];
         
-        tempButton.frame = CGRectMake(width, 0, height, height);
+        tempButton.frame = CGRectMake(width, 0, self.frame.size.height, self.frame.size.height);
         
-        width = width + tempButton.frame.size.height + 12;
-
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, height, height)];
+        imageView.dk_imagePicker = DKImagePickerWithImages([dayImageArray objectAtIndex:i],[nightImageArray objectAtIndex:i],[dayImageArray objectAtIndex:i]);
+        
+        imageView.center = CGPointMake(tempButton.frame.size.height/2, tempButton.frame.size.height/2);
+        [tempButton addSubview:imageView];
+//        tempButton.backgroundColor = [UIColor randomColor];
+        
+        width = width + tempButton.frame.size.height;
+        
+        tempButton.tag = i;
+        
+        [tempButton addTarget:self action:@selector(tempButton:) forControlEvents:UIControlEventTouchUpInside];
+        
         [_backgroundView addSubview:tempButton];
         
         tempButton.center = CGPointMake(tempButton.center.x, self.frame.size.height/2);
@@ -82,7 +93,13 @@
     _backgroundView.frame = CGRectMake(self.frame.size.width - width, 0, width, self.frame.size.height);
     
 }
-
+- (void)tempButton:(UIButton *)sender
+{
+    
+    if ([self.delegate respondsToSelector:@selector(commentsCollectionAndShareButtonClicked:)]) {
+        [self.delegate commentsCollectionAndShareButtonClicked:sender.tag];
+    }
+}
 - (UIButton *)commentsButton
 {
     
@@ -90,7 +107,7 @@
         
         self.commentsButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        _commentsButton.frame = CGRectMake(12, self.frame.size.height*0.2-1, self.frame.size.width - _backgroundView.frame.size.width - 15, self.frame.size.height*0.6);
+        _commentsButton.frame = CGRectMake(12, self.frame.size.height*0.2-1, self.frame.size.width - _backgroundView.frame.size.width - 5, self.frame.size.height*0.6);
         _commentsButton.layer.dk_borderColorPicker = DKColorPickerWithKey(白色背景上的默认标签字体颜色);
         _commentsButton.dk_backgroundColorPicker = DKColorPickerWithKey(默认背景颜色);
         

@@ -29,6 +29,9 @@
 #import "CBNSubscriptionVC.h"
 #import "CBNSetterVC.h"
 #import "CBNLoginVC.h"
+#import "CBNUserInfoVC.h"
+#import "CBNBookShopVC.h"
+#import "CBNBookInfoVC.h"
 
 #define draw_Back_Alpha  0.8
 #define user_Center_Open  0.48
@@ -88,7 +91,8 @@
 {
 
     [CBNChannelColumnRequest GET:[CBNChannelColumnRequest getChannelColumnURL] parameters:[CBNChannelColumnRequest getChannelColumnParameters] success:^(id result) {
-        
+        NSLog(@"%@",result);
+
         if ([[result objectForKey:@"Code"] integerValue] == 200) {
             /*
              *  获取本地缓存的频道列表
@@ -182,7 +186,9 @@
 {
 
     CBNPublicChannelVC *publicVC = [[CBNPublicChannelVC alloc] init];
+    CBNChannelColumnModel *publicModel = [[CBNChannelColumnModel alloc] initWithChannelColumnInfo:channelDic];
     
+    publicVC.channelColumnModel = publicModel;
     publicVC.title = [channelDic objectForKey:@"name"];
     
     return publicVC;
@@ -262,10 +268,12 @@
     [self.mm_drawerController closeDrawerAnimated:YES completion:^(BOOL finished) {
         
     }];
-    CBNLoginVC *loginVC = [[CBNLoginVC alloc] init];
+//    CBNLoginVC *loginVC = [[CBNLoginVC alloc] init];
+//    
+//    [self.navigationController pushViewController:loginVC animated:YES];
+    CBNUserInfoVC *userInfoVC = [[CBNUserInfoVC alloc] init];
     
-    [self.navigationController pushViewController:loginVC animated:YES];
-    
+    [self.navigationController pushViewController:userInfoVC animated:YES];
     
 }
 - (void)goToSearchVC:(id)sender
@@ -370,11 +378,31 @@
 -(void)goToIssuedInfo:(NSInteger)index
 {
     NSLog(@"期刊详情");
+    CBNBookInfoVC *bookInfoVC = [[CBNBookInfoVC alloc] init];
+    
+    [self.navigationController pushViewController:bookInfoVC animated:YES];
+    
+    [UIView animateWithDuration:2 animations:^{
+        
+    } completion:^(BOOL finished) {
+        [self cleanFuzzyImageView];
+        
+    }];
 }
 -(void)goToBookShop:(UIButton *)sender
 {
     NSLog(@"书店列表");
-
+    CBNBookShopVC *bookShopVC = [[CBNBookShopVC alloc] init];
+    
+    [self.navigationController pushViewController:bookShopVC animated:YES];
+    
+    [UIView animateWithDuration:2 animations:^{
+        
+    } completion:^(BOOL finished) {
+        [self cleanFuzzyImageView];
+        
+    }];
+  
 }
 - (void)bookShopDrawViewOpen
 {

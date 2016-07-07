@@ -9,10 +9,19 @@
 #import <UIKit/UIKit.h>
 
 @class CBNArticleFootView;
+
+typedef NS_ENUM(NSInteger, CBNArticleFootViewType) {
+    
+    CBNArticleFootComments = 0,
+    
+    CBNArticleFootColletion = 1,
+    
+    CBNArticleFootShare = 2,
+};
 @protocol CBNArticleFootViewDelegate <NSObject>
 
 - (void)commentsButtonClicked:(UIButton *)sender;
-
+- (void)commentsCollectionAndShareButtonClicked:(CBNArticleFootViewType)type;
 @end
 
 @interface CBNArticleFootView : UIView

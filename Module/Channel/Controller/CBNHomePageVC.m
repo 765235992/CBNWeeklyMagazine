@@ -288,9 +288,9 @@
             [self.navigationController pushViewController:videoVC animated:YES];
             
         }else{
-            CBNTextArticleVC *ar = [[CBNTextArticleVC alloc] init];
             
-            [self.navigationController pushViewController:ar animated:YES];
+            [self goToTextArticleVCWithChapt_ID:channelModel.chapt_id issue_ID:channelModel.issue_id DataType:channelModel.DataType daymore:channelModel.daymore];
+            
         }
     }
 
@@ -310,16 +310,24 @@
     if (!_headerView) {
         
         self.headerView = [[CBNRecommendHeaderView alloc] initWithFrame:CGRectMake(0, 0, screen_Width, screen_Width*0.75 )];
+        __weak typeof(self) weakSelf = self;
         
         _headerView.sliderView.shufflingView.imageViewDidTapAtIndex = ^(CBNShufflingModel *shufflingModel){
-            CBNTextArticleVC *ar = [[CBNTextArticleVC alloc] init];
             
-            [self.navigationController pushViewController:ar animated:YES];
+            [weakSelf homeHeaderItemClicked:shufflingModel.index];
+//            CBNTextArticleVC *ar = [[CBNTextArticleVC alloc] init];
+//            
+//            [self.navigationController pushViewController:ar animated:YES];
         };
         
     }
     
     return _headerView;
+}
+
+- (void)homeHeaderItemClicked:(NSInteger)index
+{
+    
 }
 #define 创建用来装数据的数组
 - (NSMutableArray *)sourceArray

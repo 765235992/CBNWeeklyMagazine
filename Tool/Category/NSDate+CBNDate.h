@@ -22,5 +22,5 @@
  *  标准时间转成想要的字符串时间
  */
 + (NSString *)standardDateChangeToNeedTime:(NSDate *)date;
-
++ (NSString *)pointStandardDateChangeToNeedTime:(NSString *)dateString;
 @end

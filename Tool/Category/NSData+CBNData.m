@@ -72,5 +72,15 @@ static inline void output64Chunk( int c1, int c2, int c3, int pads, NSMutableDat
     
     return [[NSString alloc] initWithData:buffer encoding:NSASCIIStringEncoding];
 }
++ (NSData*)returnDataWithDictionary:(NSDictionary*)dict
+{
+    NSMutableData* data = [[NSMutableData alloc]init];
+    NSKeyedArchiver* archiver = [[NSKeyedArchiver alloc]initForWritingWithMutableData:data];
+    [archiver encodeObject:dict forKey:@"talkData"];
+    [archiver finishEncoding];
+   
+    return data;
+}
+
 
 @end

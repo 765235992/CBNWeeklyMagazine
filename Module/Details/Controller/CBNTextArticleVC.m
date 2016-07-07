@@ -25,8 +25,9 @@
 #import "CBNChaptBlockCell.h"
 #import "CBNDetailBigIamgeVC.h"
 #import "CBNArticleFootView.h"
+#import "CBNTextNewsDetailRequest.h"
 
-@interface CBNTextArticleVC ()<UITableViewDataSource, UITableViewDelegate,CBNArticleFootViewDelegate>
+@interface CBNTextArticleVC ()<UITableViewDataSource, UITableViewDelegate,CBNArticleFootViewDelegate,UIActionSheetDelegate>
 @property (nonatomic, strong) NSMutableArray *sourceArray;
 @property (nonatomic, strong) UITableView *aTableView;
 @property (nonatomic, strong) CBNArticleModel *articleModel;
@@ -59,47 +60,105 @@
     
     [self.view addSubview:self.articleFootView];
     [self loadData];
-
     
+    
+   
 }
 
 #define mark loadData
 - (void)loadData
 {
-    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    NSString *str = [[NSBundle mainBundle] pathForResource:@"21860" ofType:@"json"];
-    NSData *data = [NSData dataWithContentsOfFile:str];
+    //2是期刊，1是日更
+    if ([self.daymore integerValue] == 2) {
+        
+        [CBNTextNewsDetailRequest GET:[CBNTextNewsDetailRequest getNormalTextNewsDetailURL] parameters:[CBNTextNewsDetailRequest getNormalTextNewsDetailParametersWithChapt_ID:self.chapt_ID issue_ID:self.issue_ID] success:^(id result) {
+            
+            if ([[result objectForKey:@"Code"] integerValue] == 200) {
+                
+                [self dayMoreText:result];
+            }else{
+                
+//                UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"提示" message:[result objectForKey:@"Error"] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+//                
+//                [alter show];
+                
+            }
+
+        } failed:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+    }else{
+        [CBNTextNewsDetailRequest GET:[CBNTextNewsDetailRequest getDaymoreTextNewsDetailURL] parameters:[CBNTextNewsDetailRequest getDaymoreTextNewsDetailParametersWithChapt_ID:self.chapt_ID issue_ID:self.issue_ID] success:^(id result) {
+            
+            if ([[result objectForKey:@"Code"] integerValue] == 200) {
+                
+                [self dayMoreText:result];
+            }else{
+                
+//                UIAlertView *alter = [[UIAlertView alloc] initWithTitle:@"提示" message:[result objectForKey:@"Error"] delegate:self cancelButtonTitle:@"取消" otherButtonTitles:nil, nil];
+//                
+//                [alter show];
+                
+            }
+            
+        } failed:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+
+    }
+}
+- (void)dayMoreText:(id) result
+{
+    self.articleModel = [[CBNArticleModel alloc] initArticleResult:[result objectForKey:@"DataList"]];
     
-    NSDictionary *newDic = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
-    
-    
-    self.articleModel = [[CBNArticleModel alloc] initArticleResult:newDic];
     self.headerView.chapt_Info_Model = _articleModel.chapt_info;
     
     _headerView.author_List = _articleModel.author_list;
     
-    //        dispatch_async(dispatch_get_main_queue(), ^{
-    
-    NSLog(@"%@",_articleModel.block_list);
-    [self.aTableView setTableHeaderView:self.headerView];
+    [_aTableView setTableHeaderView:self.headerView];
     [_aTableView setTableFooterView:self.footView];
     [_sourceArray insertObject:_articleModel.block_list atIndex:0];
     NSMutableArray *bottomArray = [[NSMutableArray alloc] init];
     
-    [bottomArray addObject:@"mask"];
-    [bottomArray addObject:@"mask1"];
+    [bottomArray addObject:@"like_Collection_Share"];
+    [bottomArray addObject:@"related_Book_Mask"];
     [bottomArray addObject:@"banner"];
-    [bottomArray addObject:@"banner1"];
+    if (_articleModel.related_news_list.count > 0) {
+        
+        [bottomArray addObject:@"related_news"];
+        
+    }
     [_sourceArray addObject:bottomArray];
     [_aTableView reloadData];
-    
-    //        });
-    
-    //    });
-//        _aTableView.tableHeaderView = self.headerView;
-    
-}
 
+    
+
+}
+//- (void)issueText:(id) result
+//{
+//    self.articleModel = [[CBNArticleModel alloc] initArticleResult:[result objectForKey:@"DataList"]];
+//    
+//    self.headerView.chapt_Info_Model = _articleModel.chapt_info;
+//    
+//    _headerView.author_List = _articleModel.author_list;
+//    
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//        
+//        [_aTableView setTableHeaderView:self.headerView];
+//        [_aTableView setTableFooterView:self.footView];
+//        [_sourceArray insertObject:_articleModel.block_list atIndex:0];
+//        NSMutableArray *bottomArray = [[NSMutableArray alloc] init];
+//        
+//        [bottomArray addObject:@"like_Collection_Share"];
+//        [bottomArray addObject:@"related_Book_Mask"];
+//        [bottomArray addObject:@"banner"];
+//        [bottomArray addObject:@"related_news"];
+//        [_sourceArray addObject:bottomArray];
+//        [_aTableView reloadData];
+//    });
+//    
+//    
+//}
 #pragma mark 创建tableView
 - (UITableView *)aTableView
 {
@@ -119,7 +178,7 @@
     return _aTableView;
 }
 
-#define mark CBNArticleHeaderView1
+#define markCBNArticleHeaderView1
 - (CBNArticleHeaderView *)headerView
 {
     if (!_headerView) {
@@ -127,7 +186,7 @@
     }
     return _headerView;
 }
-#define mark footView
+#define markfootView
 - (UIView *)footView
 {
     if (!_footView) {
@@ -247,7 +306,7 @@
     
     NSString *type = [[_sourceArray objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
     
-    if ([type isEqualToString:@"mask"]) {
+    if ([type isEqualToString:@"like_Collection_Share"]) {
         CBNRecommendCollectionAndShareCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CBNRecommendCollectionAndShareCell"];
         if (cell == nil) {
             cell = [[CBNRecommendCollectionAndShareCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CBNRecommendCollectionAndShareCell"];
@@ -255,7 +314,7 @@
         }
 
         return cell;
-    }else if ([type isEqualToString:@"mask1"]) {
+    }else if ([type isEqualToString:@"related_Book_Mask"]) {
         CBNBookMarsksCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CBNBookMarsksCell"];
         if (cell == nil) {
             cell = [[CBNBookMarsksCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CBNBookMarsksCell"];
@@ -263,7 +322,9 @@
         }
         return cell;
     }else if ([type isEqualToString:@"banner"]) {
+        
         CBNADBannerCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CBNADBannerCell"];
+        
         if (cell == nil) {
             cell = [[CBNADBannerCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CBNADBannerCell"];
             
@@ -272,6 +333,7 @@
     }else{
         CBNRelatedNewsCell *cell = [tableView dequeueReusableCellWithIdentifier:@"CBNRelatedNewsCell"];
         if (cell == nil) {
+            
             cell = [[CBNRelatedNewsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"CBNRelatedNewsCell"];
             
         }
@@ -296,10 +358,10 @@
     }
     NSString *type = [[_sourceArray objectAtIndex:1] objectAtIndex:indexPath.row];
     
-    if ([type isEqualToString:@"mask"]) {
+    if ([type isEqualToString:@"like_Collection_Share"]) {
 
         return screen_Width*0.12*2 + 17*screen_Width/320;
-    }else if ([type isEqualToString:@"mask1"]){
+    }else if ([type isEqualToString:@"related_Book_Mask"]){
         
         return screen_Width*0.12*2 ;
         
@@ -341,6 +403,29 @@
 - (void)commentsButtonClicked:(UIButton *)sender
 {
     
+}
+- (void)commentsCollectionAndShareButtonClicked:(CBNArticleFootViewType)type
+{
+    NSLog(@"%ld",(long)type);
+    
+    UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:@"分享" delegate:self cancelButtonTitle:@"取消" destructiveButtonTitle:@"QQ" otherButtonTitles:@"Sina",@"weixin", nil];
+    [sheet showInView:self.view];
+}
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    
+    if (buttonIndex == 0) {
+        //QQ
+        
+        [[CBNUMShareManager sharedInstance] shareToThePlate:CBNQQPlate title:@"愤怒的小鸟" content:@"愤怒的小鸟" image:[UIImage imageNamed:@"defaultImage.jpg"] andUrl:@"http:www.baidu.com"];
+    }else if (buttonIndex == 1){
+        [[CBNUMShareManager sharedInstance] shareToThePlate:CBNSinaPlate title:@"愤怒的小鸟" content:@"愤怒的小鸟" image:[UIImage imageNamed:@"defaultImage.jpg"] andUrl:@"http:www.baidu.com"];
+            //sina
+    }else if (buttonIndex == 2){
+        [[CBNUMShareManager sharedInstance] shareToThePlate:CBNWechatSessionPlate title:@"愤怒的小鸟" content:@"愤怒的小鸟" image:[UIImage imageNamed:@"defaultImage.jpg"] andUrl:@"http:www.baidu.com"];
+
+        //weixin
+    }
 }
 
 @end

@@ -19,6 +19,14 @@
     self.navigationController.navigationBar.translucent= NO;
     self.navigationController.navigationBar.dk_barTintColorPicker = DKColorPickerWithColors([UIColor whiteColor],RGBColor(3, 3, 3, 0.6),[UIColor orangeColor]);
     [self.navigationController.navigationBar setBackgroundImage:[[UIColor clearColor] colorImage] forBarMetrics:UIBarMetricsDefault];
+    [self.navigationController.navigationBar setShadowImage:[UIColorFromRGB(0xE7E7E7) colorImage]];
+
+}
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+    [self.navigationController.navigationBar setShadowImage:[[UIColor clearColor] colorImage]];
+
 }
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -124,7 +132,8 @@
     
     [backButton dk_setImage:DKImagePickerWithImages([UIImage imageNamed:@"white_back_image_Day.png"],[UIImage imageNamed:@"white_back_image_Day.png"],[UIImage imageNamed:@"white_back_image_Day.png"]) forState:UIControlStateNormal];
     
-    backButton.frame = CGRectMake(0, 0, 25, 25);
+    backButton.frame = CGRectMake(0, 0, 44, 44);
+    [backButton setImageEdgeInsets:UIEdgeInsetsMake(10, 0, 10, 20)];
     
     [backButton addTarget:self action:@selector(backButton:) forControlEvents:UIControlEventTouchUpInside];
     
@@ -132,9 +141,55 @@
     
     UIBarButtonItem *leftSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
     
-    leftSpacer.width = -10;
+    leftSpacer.width = -8;
     
     self.navigationItem.leftBarButtonItems = @[leftSpacer,backBar];
 }
+- (void)setItemTitleWithTitle:(NSString *)title
+{
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.navigationItem.title = @" 1 ";
+    
+    [self.navigationController.navigationBar setTitleTextAttributes:@{NSForegroundColorAttributeName:[UIColor clearColor]}];
+    
+    UILabel *navigationLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, screen_Width, 44)];
+    navigationLabel.text = title;
+    navigationLabel.textAlignment = NSTextAlignmentCenter;
+    navigationLabel.dk_textColorPicker = DKColorPickerWithKey(新闻大标题字体颜色);
+    navigationLabel.font = font_px_Medium(16.0);
+    navigationLabel.backgroundColor = [UIColor orangeColor];
+    
+    self.navigationItem.titleView = navigationLabel;
+}
 
+- (void)serRightBarButtonWithText:(NSString *)text
+{
+    UIButton *textButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    
+    
+    
+    textButton.frame = CGRectMake(0, 0, 44, 44);
+    [textButton dk_setTitleColorPicker:DKColorPickerWithKey(新闻大标题字体颜色) forState:UIControlStateNormal];
+    textButton.backgroundColor = [UIColor redColor];
+    
+    [textButton setTitle:text forState:UIControlStateNormal];
+    textButton.titleLabel.font = font_px_Regular(16.0);
+
+    textButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
+    [textButton addTarget:self action:@selector(textButton:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *textBar = [[UIBarButtonItem alloc] initWithCustomView:textButton];
+    
+    UIBarButtonItem *rightSpacer = [[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+    
+    rightSpacer.width = -8;
+    
+    self.navigationItem.rightBarButtonItems = @[rightSpacer,textBar];
+
+}
+- (void)textButton:(UIButton *)sender
+{
+    
+}
 @end

@@ -69,7 +69,6 @@
 + (void)loadMoreProjectFromSeverSuccess:(void (^)(NSMutableArray *projectModelArray))projectModelArray failed:(void (^)(NSString *errorStr))errorStr
 {
     [self GET:[self getProjectNewsURL] parameters:[self getProjectNewsParameters] success:^(id result) {
-        
         if ([[result objectForKey:@"Code"]integerValue] == 200) {
             NSMutableArray *array = [[NSMutableArray alloc] init];
             
